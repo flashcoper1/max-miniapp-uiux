@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     // Добавляем базовые опции сюда, чтобы IDE их видела
+    "jsx": "react-jsx",
     "composite": true,
     "esModuleInterop": true
   },

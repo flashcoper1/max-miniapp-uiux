@@ -14,7 +14,13 @@ import { TaskItem } from '../../components/molecules/TaskItem';
 import { type Task } from '../../types';
 import { taskApi } from '../../api/taskApi';
 
-// --- Машина Состояний (Playbook Ch. 2) ---
+// --- Типизация Пропсов ---
+export interface TaskListScreenProps {
+    onAddTask: () => void;
+    onEditTask: (task: Task) => void;
+}
+
+// --- Машина Состояний ---
 type State = {
     tasks: Task[];
     status: 'idle' | 'loading' | 'success' | 'error';
@@ -68,7 +74,7 @@ const taskListReducer = (state: State, action: Action): State => {
 };
 
 // --- Компонент-Организм ---
-export const TaskListScreen = () => {
+export const TaskListScreen = ({ onAddTask, onEditTask }: TaskListScreenProps) => {
     const [state, dispatch] = useReducer(taskListReducer, initialState);
     const errorButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -98,11 +104,12 @@ export const TaskListScreen = () => {
     }, []);
 
     const handleTaskClick = useCallback((task: Task) => {
-        console.log('Переход к задаче для редактирования:', task.title);
-    }, []);
+        onEditTask(task);
+    }, [onEditTask]);
 
     const handleDelete = useCallback((task: Task) => {
         console.log('Удаление задачи:', task.title);
+        // Здесь должна быть реализована логика оптимистичного удаления
     }, []);
 
     const renderContent = () => {
@@ -139,29 +146,34 @@ export const TaskListScreen = () => {
     };
 
     return (
-        <Panel mode="secondary" style={{ padding: '16px 0' }} aria-live="polite">
-            <CellHeader titleStyle="normal" after={<Button mode="tertiary">Фильтр</Button>}>
-                <Typography.Headline variant="large-strong">Мои задачи</Typography.Headline>
-            </CellHeader>
+        <>
+            <Panel mode="secondary" style={{ padding: '16px 0', minHeight: '100vh' }} aria-live="polite">
+                <CellHeader titleStyle="normal" after={<Button mode="tertiary">Фильтр</Button>}>
+                    <Typography.Headline variant="large-strong">Мои задачи</Typography.Headline>
+                </CellHeader>
 
-            {state.notification && (
-                <Flex role="alert" style={{ padding: '8px 16px', background: 'var(--background-accent-negative)', color: 'var(--text-contrast-static)', margin: '0 16px 12px', borderRadius: '12px' }} justify="space-between" align="center">
-                    <Typography.Body variant="small-strong">{state.notification.message}</Typography.Body>
-                    <Button mode="tertiary" appearance="contrast-static" size="small" onClick={() => dispatch({ type: 'DISMISS_NOTIFICATION' })}>
-                        OK
-                    </Button>
-                </Flex>
-            )}
+                {state.notification && (
+                    <Flex role="alert" style={{ padding: '8px 16px', background: 'var(--background-accent-negative)', color: 'var(--text-contrast-static)', margin: '0 16px 12px', borderRadius: '12px' }} justify="space-between" align="center">
+                        <Typography.Body variant="small-strong">{state.notification.message}</Typography.Body>
+                        <Button mode="tertiary" appearance="contrast-static" size="small" onClick={() => dispatch({ type: 'DISMISS_NOTIFICATION' })}>
+                            OK
+                        </Button>
+                    </Flex>
+                )}
 
-            {state.status === 'error' && (
-                <Flex direction="column" align="center" gap={16} style={{ padding: '20px', border: '1px solid var(--stroke-negative)', margin: '12px 16px', borderRadius: '16px' }} role="alert">
-                    <Typography.Body variant="medium">Ошибка: {state.error && state.error.message}</Typography.Body>
-                    <Button ref={errorButtonRef} onClick={loadTasks}>Попробовать снова</Button>
-                </Flex>
-            )}
+                {state.status === 'error' && (
+                    <Flex direction="column" align="center" gap={16} style={{ padding: '20px', border: '1px solid var(--stroke-negative)', margin: '12px 16px', borderRadius: '16px' }} role="alert">
+                        <Typography.Body variant="medium">Ошибка: {state.error && state.error.message}</Typography.Body>
+                        <Button ref={errorButtonRef} onClick={loadTasks}>Попробовать снова</Button>
+                    </Flex>
+                )}
 
-            {renderContent()}
-        </Panel>
+                {renderContent()}
+            </Panel>
+            <div style={{ position: 'fixed', bottom: '30px', right: '30px', zIndex: 100 }}>
+                <Button size="large" onClick={onAddTask}>+</Button>
+            </div>
+        </>
     );
 };
 

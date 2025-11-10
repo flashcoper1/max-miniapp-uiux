@@ -1,14 +1,13 @@
 // src/components/molecules/TaskItem/TaskItem.tsx
 
-// Исправление: `clsx` теперь установлен и будет найден.
 import { clsx } from 'clsx';
 import React, { useCallback, useId } from 'react';
-import { Avatar, CellSimple, Dot, Flex, IconButton, Switch, Typography } from '@maxhub/max-ui';
+import { Avatar, CellSimple, Dot, type DotAppearance, Flex, IconButton, Switch, Typography } from '@maxhub/max-ui';
 import { type Task, type TaskPriority } from '../../../types';
 
 // --- Вспомогательные компоненты и константы ---
-const priorityMap: Record<TaskPriority, { color: 'negative' | 'themed' | 'neutral-fade', label: string }> = {
-    high: { color: 'negative', label: 'Высокий приоритет' },
+const priorityMap: Record<TaskPriority, { color: DotAppearance, label: string }> = {
+    high: { color: 'accent-red', label: 'Высокий приоритет' },
     medium: { color: 'themed', label: 'Средний приоритет' },
     low: { color: 'neutral-fade', label: 'Низкий приоритет' },
 };
@@ -51,61 +50,59 @@ export const TaskItem = React.memo((props: TaskItemProps) => {
         onToggleComplete(task, e.target.checked);
     }, [onToggleComplete, task]);
 
-    const handleCellClick = useCallback((e: React.MouseEvent) => {
-        if (e.target instanceof HTMLInputElement || e.target instanceof HTMLButtonElement) {
-            return;
-        }
+    const handleCellClick = useCallback(() => {
         onClick(task);
     }, [onClick, task]);
 
     return (
-        <CellSimple
-            as="label"
-            htmlFor={switchId}
-            // Исправление: `clsx` используется для объединения классов.
-            className={clsx('task-item', className)}
-            onClick={handleCellClick}
-            before={
-                <div onClick={(e) => e.stopPropagation()}>
-                    <Switch
-                        id={switchId}
-                        checked={task.isCompleted}
-                        onChange={handleToggle}
-                        aria-labelledby={`${switchId}-title`}
-                    />
-                </div>
-            }
-            title={
-                <Typography.Body
-                    id={`${switchId}-title`}
-                    variant="medium"
-                    style={{ textDecoration: task.isCompleted ? 'line-through' : 'none' }}
-                >
-                    {task.title}
-                    <VisuallyHidden>, {priorityMap[task.priority].label}</VisuallyHidden>
-                </Typography.Body>
-            }
-            subtitle={task.dueDate ? `До ${task.dueDate.toLocaleDateString()}` : undefined}
-            after={
-                <Flex align="center" gap={12}>
-                    {task.assignee && (
-                        <Avatar.Container size={24}>
-                            <Avatar.Image src={task.assignee.avatarUrl} fallback={task.assignee.name.substring(0, 2)} />
-                        </Avatar.Container>
-                    )}
-                    <Dot appearance={priorityMap[task.priority].color} aria-hidden="true" />
-                    <IconButton
-                        size="small"
-                        mode="tertiary"
-                        appearance="negative"
-                        onClick={handleDeleteClick}
-                        aria-label={`Удалить задачу '${task.title}'`}
+        // Исправление: Оборачиваем CellSimple в нативный <label>
+        // Это решает проблему с `htmlFor` и является более надежным подходом.
+        <label htmlFor={switchId} className={clsx('task-item-label', className)}>
+            <CellSimple
+                // `CellSimple` теперь просто кликабельный div, а не label.
+                onClick={handleCellClick}
+                before={
+                    <div onClick={(e) => e.stopPropagation()}>
+                        <Switch
+                            id={switchId}
+                            checked={task.isCompleted}
+                            onChange={handleToggle}
+                            aria-labelledby={`${switchId}-title`}
+                        />
+                    </div>
+                }
+                title={
+                    <Typography.Body
+                        id={`${switchId}-title`}
+                        variant="medium"
+                        style={{ textDecoration: task.isCompleted ? 'line-through' : 'none' }}
                     >
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18 6L6 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                    </IconButton>
-                </Flex>
-            }
-        />
+                        {task.title}
+                        <VisuallyHidden>, {priorityMap[task.priority].label}</VisuallyHidden>
+                    </Typography.Body>
+                }
+                subtitle={task.dueDate ? `До ${task.dueDate.toLocaleDateString()}` : undefined}
+                after={
+                    <Flex align="center" gap={12}>
+                        {task.assignee && (
+                            <Avatar.Container size={24}>
+                                <Avatar.Image src={task.assignee.avatarUrl} fallback={task.assignee.name.substring(0, 2)} />
+                            </Avatar.Container>
+                        )}
+                        <Dot appearance={priorityMap[task.priority].color} aria-hidden="true" />
+                        <IconButton
+                            size="small"
+                            mode="tertiary"
+                            appearance="negative"
+                            onClick={handleDeleteClick}
+                            aria-label={`Удалить задачу '${task.title}'`}
+                        >
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w.org/2000/svg"><path d="M18 6L6 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                        </IconButton>
+                    </Flex>
+                }
+            />
+        </label>
     );
 });
 

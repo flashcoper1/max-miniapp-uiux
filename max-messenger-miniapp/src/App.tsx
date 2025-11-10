@@ -1,9 +1,7 @@
 // src/App.tsx
 
-// Исправление: Удалены неиспользуемые импорты `useState`, `useCallback` и `Button`.
-// `MaxUI` также не используется, если он уже обертка в `main.tsx`, но оставим на всякий случай.
-import { useState, useCallback } from 'react';
-import { MaxUI, Button } from '@maxhub/max-ui';
+import {useState, useCallback, type JSX} from 'react';
+import { MaxUI } from '@maxhub/max-ui'; // `Button` здесь больше не нужен
 import { TaskListScreen } from './screens/TaskListScreen';
 import { TaskFormOrganism } from './organisms/TaskFormOrganism';
 import { taskApi } from './api/taskApi';
@@ -41,12 +39,12 @@ export const App = (): JSX.Element => {
     return (
         <MaxUI platform="ios" colorScheme="light">
             {view.screen === 'LIST' && (
-                <>
-                    <TaskListScreen key={refreshKey} />
-                    <div style={{ position: 'fixed', bottom: '30px', right: '30px', zIndex: 100 }}>
-                        <Button size="large" onClick={() => handleShowForm()}>+</Button>
-                    </div>
-                </>
+                <TaskListScreen
+                    key={refreshKey}
+                    onAddTask={() => handleShowForm()}
+                    // Исправление: Явно указываем тип для `task`.
+                    onEditTask={(task: Task) => handleShowForm(task)}
+                />
             )}
 
             {view.screen === 'FORM' && (
