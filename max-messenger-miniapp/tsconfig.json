@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    // Добавляем базовые опции сюда, чтобы IDE их видела
+    "composite": true,
+    "esModuleInterop": true
+  },
+  "files": [],
+  "include": [], // Явно указываем, что этот файл сам по себе ничего не компилирует
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
+  ]
+}

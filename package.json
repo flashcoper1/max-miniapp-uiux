@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@maxhub/max-ui": "^0.1.12",
+    "clsx": "^2.1.1"
+  }
+}
