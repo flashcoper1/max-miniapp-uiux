@@ -101,10 +101,9 @@ const Calendar: React.FC<CalendarProps> = ({ tasks, onDateSelect, selectedDate }
   return (
     <Panel className="calendar-panel">
       {/* Header */}
-      <Flex className="calendar-header" justify="between" align="center">
+      <Flex className="calendar-header" justify="space-between" align="center">
         <IconButton
           mode="tertiary"
-          size="s"
           className="calendar-nav-btn"
           onClick={handlePrevMonth}
         >
@@ -119,7 +118,6 @@ const Calendar: React.FC<CalendarProps> = ({ tasks, onDateSelect, selectedDate }
 
         <IconButton
           mode="tertiary"
-          size="s"
           className="calendar-nav-btn"
           onClick={handleNextMonth}
         >

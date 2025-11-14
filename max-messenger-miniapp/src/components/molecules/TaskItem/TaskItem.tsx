@@ -1,6 +1,7 @@
 import React from 'react';
 import type { Task } from '../../../types';
 import { IconButton } from '@maxhub/max-ui';
+import { formatDate } from '../../../utils/date';
 import './TaskItem.css';
 
 interface TaskItemProps {
@@ -14,11 +15,6 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onToggle, onDelete, onClick }
   const priorityClass = `priority-${task.priority}`;
   const statusClass = `status-${task.status}`;
 
-  const formatDate = (dateString?: string) => {
-    if (!dateString) return null;
-    const date = new Date(dateString);
-    return date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
-  };
 
   return (
     <div className={`task-item ${statusClass}`} onClick={() => onClick(task)}>
@@ -54,7 +50,6 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onToggle, onDelete, onClick }
       <IconButton
         className="task-delete"
         mode="secondary"
-        size="s"
         onClick={(e) => {
           e.stopPropagation();
           onDelete(task.id);

@@ -5,7 +5,7 @@ import { MaxUI, Button } from '@maxhub/max-ui';
 import TaskListScreen from './screens/TaskListScreen';
 import CalendarScreen from './screens/CalendarScreen';
 import StatisticsScreen from './screens/StatisticsScreen';
-import TaskFormOrganism from './organisms/TaskFormOrganism';
+import TaskFormOrganism from './components/organisms/TaskFormOrganism';
 import './App.css';
 
 function App() {
