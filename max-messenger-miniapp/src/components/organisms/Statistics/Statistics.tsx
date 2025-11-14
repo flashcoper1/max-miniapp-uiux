@@ -87,24 +87,24 @@ const Statistics: React.FC<StatisticsProps> = ({ tasks }) => {
       <div className="statistics-header">
         <h2 className="statistics-title">Статистика</h2>
 
-        <div className="period-selector">
+        <div className="segmented-control">
           <Button
-            mode={period === 'week' ? 'primary' : 'secondary'}
-            className={`period-btn ${period === 'week' ? 'active' : ''}`}
+            mode="tertiary"
+            className={`segmented-btn ${period === 'week' ? 'active' : ''}`}
             onClick={() => setPeriod('week')}
           >
             Неделя
           </Button>
           <Button
-            mode={period === 'month' ? 'primary' : 'secondary'}
-            className={`period-btn ${period === 'month' ? 'active' : ''}`}
+            mode="tertiary"
+            className={`segmented-btn ${period === 'month' ? 'active' : ''}`}
             onClick={() => setPeriod('month')}
           >
             Месяц
           </Button>
           <Button
-            mode={period === 'year' ? 'primary' : 'secondary'}
-            className={`period-btn ${period === 'year' ? 'active' : ''}`}
+            mode="tertiary"
+            className={`segmented-btn ${period === 'year' ? 'active' : ''}`}
             onClick={() => setPeriod('year')}
           >
             Год
@@ -112,45 +112,59 @@ const Statistics: React.FC<StatisticsProps> = ({ tasks }) => {
         </div>
       </div>
 
-      {/* Progress Circle */}
+      {/* Progress Circle - Donut Chart */}
       <div className="progress-circle-container">
         <svg className="progress-circle" viewBox="0 0 160 160">
           <defs>
+            {/* Main gradient for progress */}
             <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stopColor="#9484e3" />
               <stop offset="100%" stopColor="#7E6FD5" />
             </linearGradient>
+
+            {/* Subtle glow effect */}
+            <filter id="glowEffect">
+              <feGaussianBlur stdDeviation="2" result="coloredBlur" />
+              <feMerge>
+                <feMergeNode in="coloredBlur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
           </defs>
 
-          {/* Background circle */}
+          {/* Background circle (track) */}
           <circle
             cx="80"
             cy="80"
             r="70"
             fill="none"
-            stroke="var(--surface-gray)"
-            strokeWidth="12"
-            opacity="0.2"
+            stroke="#4a4a52"
+            strokeWidth="14"
+            opacity="0.3"
+            className="progress-track"
           />
 
-          {/* Progress circle */}
+          {/* Progress circle with animation */}
           <circle
             cx="80"
             cy="80"
             r="70"
             fill="none"
             stroke="url(#progressGradient)"
-            strokeWidth="12"
+            strokeWidth="14"
             strokeLinecap="round"
             strokeDasharray={circumference}
             strokeDashoffset={strokeDashoffset}
             transform="rotate(-90 80 80)"
             className="progress-circle-stroke"
+            filter="url(#glowEffect)"
           />
         </svg>
 
+        {/* Center percentage text */}
         <div className="progress-percentage">
-          {animatedPercentage}<span className="percent-sign">%</span>
+          <span className="percentage-number">{animatedPercentage}</span>
+          <span className="percent-sign">%</span>
         </div>
       </div>
 

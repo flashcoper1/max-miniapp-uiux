@@ -20,7 +20,68 @@
   margin: 0;
 }
 
-/* Period Selector */
+/* Segmented Control */
+.segmented-control {
+  display: flex;
+  gap: 0;
+  background: #1F1E24;
+  padding: 4px;
+  border-radius: var(--radius-full);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(126, 111, 213, 0.1);
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.segmented-btn {
+  flex: 1;
+  padding: var(--spacing-sm) var(--spacing-md) !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  border-radius: var(--radius-md) !important;
+  white-space: nowrap;
+  color: var(--mist-gray) !important;
+  background: transparent !important;
+  border: none !important;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  position: relative;
+  z-index: 1;
+  outline: none !important;
+}
+
+.segmented-btn:hover:not(.active) {
+  color: var(--cloud-white) !important;
+  background: rgba(126, 111, 213, 0.08) !important;
+}
+
+.segmented-btn.active {
+  background: var(--kinetic-violet) !important;
+  color: var(--cloud-white) !important;
+  box-shadow: 0 4px 16px rgba(126, 111, 213, 0.3);
+}
+
+.segmented-btn.active::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-md);
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.1), transparent);
+  pointer-events: none;
+  animation: shimmer 2s infinite;
+}
+
+/* Shimmer effect */
+@keyframes shimmer {
+  0%, 100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Old period selector styles (for backward compatibility) */
 .period-selector {
   display: flex;
   gap: var(--spacing-xs);
@@ -51,40 +112,83 @@
 /* Progress Circle Container */
 .progress-circle-container {
   position: relative;
-  width: 200px;
-  height: 200px;
+  width: 240px;
+  height: 240px;
   margin: var(--spacing-xl) auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .progress-circle {
   width: 100%;
   height: 100%;
   transform: rotate(-90deg);
+  filter: drop-shadow(0 8px 24px rgba(126, 111, 213, 0.2));
+}
+
+.progress-track {
+  transition: stroke-dasharray 0.3s ease;
 }
 
 .progress-circle-stroke {
-  transition: stroke-dashoffset 1s cubic-bezier(0.4, 0, 0.2, 1);
-  filter: drop-shadow(0 0 8px rgba(126, 111, 213, 0.3));
+  transition: stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: drawStroke 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
-/* Animated percentage in center */
+/* Animated center text */
 .progress-percentage {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 48px;
-  font-weight: 700;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 4px;
+}
+
+.percentage-number {
+  font-size: 64px;
+  font-weight: 800;
   color: var(--cloud-white);
   line-height: 1;
-  text-shadow: 0 2px 8px rgba(126, 111, 213, 0.2);
+  letter-spacing: -2px;
+  text-shadow: 0 4px 16px rgba(126, 111, 213, 0.3);
+  animation: popIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s backwards;
 }
 
 .percent-sign {
-  font-size: 28px;
-  font-weight: 500;
-  opacity: 0.7;
-  margin-left: 2px;
+  font-size: 36px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1;
+  margin-top: 8px;
+  animation: popIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s backwards;
+}
+
+/* Animation for circle drawing */
+@keyframes drawStroke {
+  from {
+    stroke-dashoffset: 439.6;
+    opacity: 0;
+  }
+  to {
+    stroke-dashoffset: auto;
+    opacity: 1;
+  }
+}
+
+/* Pop-in animation for percentage */
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.3);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
 }
 
 /* Metrics List */
@@ -204,25 +308,29 @@
     align-items: flex-start !important;
   }
 
-  .period-selector {
+  .segmented-control {
     width: 100%;
   }
 
-  .period-btn {
+  .segmented-btn {
     flex: 1;
   }
 
   .progress-circle-container {
-    width: 160px;
-    height: 160px;
+    width: 200px;
+    height: 200px;
+    margin: var(--spacing-lg) auto;
   }
 
-  .progress-percentage {
-    font-size: 40px;
+  .percentage-number {
+    font-size: 52px;
+    font-weight: 800;
+    letter-spacing: -1px;
   }
 
   .percent-sign {
-    font-size: 24px;
+    font-size: 28px;
+    margin-top: 6px;
   }
 
   .metric-value {
