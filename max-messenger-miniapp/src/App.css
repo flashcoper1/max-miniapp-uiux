@@ -12,12 +12,6 @@
   padding-bottom: 100px; /* Space for bottom nav */
 }
 
-/* Placeholder Panel */
-.placeholder-panel {
-  padding: var(--spacing-xl);
-  text-align: center;
-  margin: var(--spacing-lg);
-}
 
 /* Floating Action Button */
 .fab {

@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import type { Task } from './types';
 import { taskApi } from './api/taskApi';
-import { MaxUI, Panel, Button } from '@maxhub/max-ui';
+import { MaxUI, Button } from '@maxhub/max-ui';
 import TaskListScreen from './screens/TaskListScreen';
+import CalendarScreen from './screens/CalendarScreen';
+import StatisticsScreen from './screens/StatisticsScreen';
 import TaskFormOrganism from './organisms/TaskFormOrganism';
 import './App.css';
 
@@ -23,16 +25,10 @@ function App() {
             <TaskListScreen onCreateTask={() => setIsFormOpen(true)} />
           )}
           {currentScreen === 'calendar' && (
-            <Panel className="placeholder-panel">
-              <h2>Календарь</h2>
-              <p style={{ color: 'var(--mist-gray)' }}>В разработке...</p>
-            </Panel>
+            <CalendarScreen />
           )}
           {currentScreen === 'stats' && (
-            <Panel className="placeholder-panel">
-              <h2>Статистика</h2>
-              <p style={{ color: 'var(--mist-gray)' }}>В разработке...</p>
-            </Panel>
+            <StatisticsScreen />
           )}
         </div>
 

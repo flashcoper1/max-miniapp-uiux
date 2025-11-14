@@ -1,0 +1,66 @@
+.calendar-screen {
+  padding: var(--spacing-lg);
+  padding-bottom: 100px;
+  max-width: 768px;
+  margin: 0 auto;
+}
+
+.calendar-screen-header {
+  margin-bottom: var(--spacing-xl);
+}
+
+.calendar-screen-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--cloud-white);
+  margin: 0 0 var(--spacing-sm) 0;
+}
+
+.calendar-screen-subtitle {
+  font-size: 16px;
+  color: var(--mist-gray);
+  margin: 0;
+}
+
+/* Selected Date Section */
+.selected-date-section {
+  margin-top: var(--spacing-xl);
+}
+
+.selected-date-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--cloud-white);
+  margin: 0 0 var(--spacing-md) 0;
+  padding-left: var(--spacing-sm);
+  border-left: 3px solid var(--kinetic-violet);
+}
+
+.tasks-for-date {
+  display: flex;
+  flex-direction: column;
+}
+
+.no-tasks-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xl);
+  background: var(--surface-gray);
+  border-radius: var(--radius-md);
+  text-align: center;
+}
+
+.no-tasks-icon {
+  font-size: 48px;
+  margin-bottom: var(--spacing-md);
+  opacity: 0.5;
+}
+
+.no-tasks-message p {
+  font-size: 14px;
+  color: var(--mist-gray);
+  margin: 0;
+}
+

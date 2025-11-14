@@ -1,0 +1,81 @@
+.statistics-screen {
+  padding: var(--spacing-lg);
+  padding-bottom: 100px;
+  max-width: 768px;
+  margin: 0 auto;
+}
+
+.statistics-screen-header {
+  margin-bottom: var(--spacing-xl);
+}
+
+.statistics-screen-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--cloud-white);
+  margin: 0 0 var(--spacing-sm) 0;
+}
+
+.statistics-screen-subtitle {
+  font-size: 16px;
+  color: var(--mist-gray);
+  margin: 0;
+}
+
+/* Insights Section */
+.insights-section {
+  margin-top: var(--spacing-xl);
+}
+
+.insights-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--cloud-white);
+  margin: 0 0 var(--spacing-md) 0;
+}
+
+.insight-card {
+  display: flex;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  background: var(--surface-gray);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-md);
+  transition: all 0.2s ease;
+}
+
+.insight-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(126, 111, 213, 0.15);
+}
+
+.insight-icon {
+  font-size: 32px;
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(126, 111, 213, 0.1);
+  border-radius: var(--radius-sm);
+}
+
+.insight-content {
+  flex: 1;
+}
+
+.insight-content h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--cloud-white);
+  margin: 0 0 var(--spacing-xs) 0;
+}
+
+.insight-content p {
+  font-size: 14px;
+  color: var(--mist-gray);
+  margin: 0;
+  line-height: 1.5;
+}
+
