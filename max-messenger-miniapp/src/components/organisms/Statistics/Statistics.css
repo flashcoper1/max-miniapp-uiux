@@ -132,8 +132,17 @@
 }
 
 .progress-circle-stroke {
-  transition: stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-  animation: drawStroke 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  transition: stroke-dashoffset 15ms linear;
+}
+
+/* Smooth circle fill animation */
+@keyframes fillCircle {
+  from {
+    stroke-dashoffset: 439.82;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
 }
 
 /* Animated center text */
@@ -145,7 +154,7 @@
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  gap: 4px;
+  gap: 2px;
 }
 
 .percentage-number {
@@ -155,7 +164,7 @@
   line-height: 1;
   letter-spacing: -2px;
   text-shadow: 0 4px 16px rgba(126, 111, 213, 0.3);
-  animation: popIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s backwards;
+  animation: fadeInScale 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.05s both;
 }
 
 .percent-sign {
@@ -163,31 +172,19 @@
   font-weight: 600;
   color: rgba(255, 255, 255, 0.7);
   line-height: 1;
-  margin-top: 8px;
-  animation: popIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s backwards;
+  margin-top: 10px;
+  animation: fadeInScale 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s both;
 }
 
-/* Animation for circle drawing */
-@keyframes drawStroke {
-  from {
-    stroke-dashoffset: 439.6;
-    opacity: 0;
-  }
-  to {
-    stroke-dashoffset: auto;
-    opacity: 1;
-  }
-}
-
-/* Pop-in animation for percentage */
-@keyframes popIn {
+/* Fade-in and scale animation for percentage */
+@keyframes fadeInScale {
   from {
     opacity: 0;
-    transform: translate(-50%, -50%) scale(0.3);
+    transform: scale(0.5);
   }
   to {
     opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
+    transform: scale(1);
   }
 }
 
@@ -276,28 +273,6 @@
 
 #progressGradient stop:last-child {
   stop-color: var(--kinetic-violet);
-}
-
-/* Animation for initial load */
-@keyframes draw-circle {
-  from {
-    stroke-dashoffset: 439.6; /* 2 * PI * 70 */
-  }
-}
-
-@keyframes count-up {
-  from {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(0.8);
-  }
-  to {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-  }
-}
-
-.progress-percentage {
-  animation: count-up 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.3s both;
 }
 
 /* Responsive */

@@ -60,10 +60,11 @@ const Statistics: React.FC<StatisticsProps> = ({ tasks }) => {
 
   // Animate percentage on load and period change
   useEffect(() => {
-    const duration = isInitialLoad ? 1000 : 500;
-    const steps = 60;
+    const animationDuration = isInitialLoad ? 600 : 300;
+    const steps = 40;
     const increment = completionPercentage / steps;
     let current = 0;
+
     const timer = setInterval(() => {
       current += increment;
       if (current >= completionPercentage) {
@@ -73,7 +74,7 @@ const Statistics: React.FC<StatisticsProps> = ({ tasks }) => {
       } else {
         setAnimatedPercentage(Math.floor(current));
       }
-    }, duration / steps);
+    }, animationDuration / steps);
 
     return () => clearInterval(timer);
   }, [completionPercentage, isInitialLoad]);
