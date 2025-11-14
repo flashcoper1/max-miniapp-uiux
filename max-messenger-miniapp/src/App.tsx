@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import type { Task } from './types';
 import { taskApi } from './api/taskApi';
 import { MaxUI, Button } from '@maxhub/max-ui';
@@ -22,7 +22,7 @@ function App() {
       <div className="app">
         <div className="app-container">
           {currentScreen === 'tasks' && (
-            <TaskListScreen onCreateTask={() => setIsFormOpen(true)} />
+            <TaskListScreen />
           )}
           {currentScreen === 'calendar' && (
             <CalendarScreen />
@@ -79,12 +79,11 @@ function App() {
         </nav>
 
         {/* Task Form Modal */}
-        {isFormOpen && (
-          <TaskFormOrganism
-            onSubmit={handleCreateTask}
-            onClose={() => setIsFormOpen(false)}
-          />
-        )}
+        <TaskFormOrganism
+          isOpen={isFormOpen}
+          onSubmit={handleCreateTask}
+          onClose={() => setIsFormOpen(false)}
+        />
       </div>
     </MaxUI>
   );

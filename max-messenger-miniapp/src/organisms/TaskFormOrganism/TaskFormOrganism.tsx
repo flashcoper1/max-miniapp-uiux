@@ -1,18 +1,41 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Panel, Input, Textarea, Button, IconButton } from '@maxhub/max-ui';
 import type { Task } from '../../types';
-import { Button, Input, Textarea, Panel } from '@maxhub/max-ui';
 import './TaskFormOrganism.css';
 
 interface TaskFormProps {
-  onSubmit: (task: Omit<Task, 'id' | 'createdAt'>) => void;
+  isOpen: boolean;
   onClose: () => void;
+  onSubmit: (task: Omit<Task, 'id' | 'createdAt'>) => void;
 }
 
-const TaskFormOrganism: React.FC<TaskFormProps> = ({ onSubmit, onClose }) => {
+type Priority = 'low' | 'medium' | 'high';
+
+const TaskFormOrganism: React.FC<TaskFormProps> = ({ isOpen, onClose, onSubmit }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [priority, setPriority] = useState<Priority>('medium');
   const [dueDate, setDueDate] = useState('');
-  const [priority, setPriority] = useState<'low' | 'medium' | 'high'>('medium');
+  const [isClosing, setIsClosing] = useState(false);
+
+  // Reset form when opened
+  useEffect(() => {
+    if (isOpen) {
+      setIsClosing(false);
+      setTitle('');
+      setDescription('');
+      setPriority('medium');
+      setDueDate('');
+    }
+  }, [isOpen]);
+
+  const handleClose = () => {
+    setIsClosing(true);
+    setTimeout(() => {
+      setIsClosing(false);
+      onClose();
+    }, 220); // Match animation duration (0.22s)
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,91 +43,98 @@ const TaskFormOrganism: React.FC<TaskFormProps> = ({ onSubmit, onClose }) => {
 
     onSubmit({
       title: title.trim(),
-      description: description.trim() || undefined,
-      dueDate: dueDate || undefined,
+      description: description.trim(),
       priority,
       status: 'todo',
+      dueDate: dueDate || undefined,
     });
 
-    // Reset form
-    setTitle('');
-    setDescription('');
-    setDueDate('');
-    setPriority('medium');
-    onClose();
+    handleClose();
   };
 
+  const handleOverlayClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      handleClose();
+    }
+  };
+
+  if (!isOpen && !isClosing) return null;
+
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <Panel className="task-form-modal" onClick={(e) => e.stopPropagation()}>
-        <div className="modal-header">
-          <div className="modal-handle" />
-          <h2>Новая задача</h2>
-          <button className="modal-close" onClick={onClose}>
+    <div
+      className={`task-form-overlay ${isClosing ? 'closing' : ''}`}
+      onClick={handleOverlayClick}
+    >
+      <Panel
+        className={`task-form-panel ${isClosing ? 'closing' : ''}`}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Header */}
+        <div className="form-header">
+          <h2 className="form-title">Новая задача</h2>
+          <IconButton
+            mode="tertiary"
+            className="form-close-btn"
+            onClick={handleClose}
+          >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M18 6L6 18M6 6l12 12" />
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
             </svg>
-          </button>
+          </IconButton>
         </div>
 
-        <form className="task-form" onSubmit={handleSubmit}>
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="form-content">
+          {/* Title */}
           <div className="form-group">
-            <label htmlFor="title">Название</label>
+            <label className="form-label required">Название задачи</label>
             <Input
-              id="title"
-              type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="Что нужно сделать?"
+              placeholder="Например: Написать отчёт"
               autoFocus
-              required
             />
           </div>
 
+          {/* Description */}
           <div className="form-group">
-            <label htmlFor="description">Описание</label>
+            <label className="form-label">Описание</label>
             <Textarea
-              id="description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Добавьте детали..."
+              placeholder="Добавьте детали задачи..."
               rows={3}
             />
           </div>
 
+          {/* Priority */}
           <div className="form-group">
-            <label htmlFor="dueDate">Срок выполнения</label>
-            <Input
-              id="dueDate"
-              type="date"
-              value={dueDate}
-              onChange={(e) => setDueDate(e.target.value)}
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Приоритет</label>
-            <div className="priority-buttons">
+            <label className="form-label">Приоритет</label>
+            <div className="priority-group">
               <Button
                 type="button"
-                mode={priority === 'low' ? 'primary' : 'secondary'}
-                className={`priority-btn priority-low ${priority === 'low' ? 'active' : ''}`}
+                mode="secondary"
+                className={`priority-btn ${priority === 'low' ? 'active' : ''}`}
+                data-priority="low"
                 onClick={() => setPriority('low')}
               >
                 Низкий
               </Button>
               <Button
                 type="button"
-                mode={priority === 'medium' ? 'primary' : 'secondary'}
-                className={`priority-btn priority-medium ${priority === 'medium' ? 'active' : ''}`}
+                mode="secondary"
+                className={`priority-btn ${priority === 'medium' ? 'active' : ''}`}
+                data-priority="medium"
                 onClick={() => setPriority('medium')}
               >
                 Средний
               </Button>
               <Button
                 type="button"
-                mode={priority === 'high' ? 'primary' : 'secondary'}
-                className={`priority-btn priority-high ${priority === 'high' ? 'active' : ''}`}
+                mode="secondary"
+                className={`priority-btn ${priority === 'high' ? 'active' : ''}`}
+                data-priority="high"
                 onClick={() => setPriority('high')}
               >
                 Высокий
@@ -112,14 +142,35 @@ const TaskFormOrganism: React.FC<TaskFormProps> = ({ onSubmit, onClose }) => {
             </div>
           </div>
 
-          <Button
-            type="submit"
-            mode="primary"
-            className="submit-btn"
-            disabled={!title.trim()}
-          >
-            Создать задачу
-          </Button>
+          {/* Due Date */}
+          <div className="form-group">
+            <label className="form-label">Срок выполнения</label>
+            <Input
+              type="date"
+              value={dueDate}
+              onChange={(e) => setDueDate(e.target.value)}
+            />
+          </div>
+
+          {/* Actions */}
+          <div className="form-actions">
+            <Button
+              type="button"
+              mode="secondary"
+              className="form-btn form-btn-cancel"
+              onClick={handleClose}
+            >
+              Отмена
+            </Button>
+            <Button
+              type="submit"
+              mode="primary"
+              className="form-btn form-btn-submit"
+              disabled={!title.trim()}
+            >
+              Создать задачу
+            </Button>
+          </div>
         </form>
       </Panel>
     </div>
@@ -127,3 +178,4 @@ const TaskFormOrganism: React.FC<TaskFormProps> = ({ onSubmit, onClose }) => {
 };
 
 export default TaskFormOrganism;
+

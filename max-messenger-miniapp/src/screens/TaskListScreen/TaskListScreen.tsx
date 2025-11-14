@@ -1,14 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import type { Task, TaskFilter, TaskStats } from '../../types';
+import { Flex, Button } from '@maxhub/max-ui';
 import { taskApi } from '../../api/taskApi';
-import { Button } from '@maxhub/max-ui';
+import type { Task } from '../../types';
 import TaskItem from '../../components/molecules/TaskItem';
 import './TaskListScreen.css';
 
+type FilterType = 'all' | 'today' | 'overdue';
+
+interface Filter {
+  id: FilterType;
+  label: string;
+}
+
+const filters: Filter[] = [
+  { id: 'all', label: 'Все' },
+  { id: 'today', label: 'Сегодня' },
+  { id: 'overdue', label: 'Истекающие' },
+];
+
 const TaskListScreen: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [filter, setFilter] = useState<TaskFilter>('all');
-  const [userName] = useState('Виктор'); // В реальном приложении из контекста
+  const [activeFilter, setActiveFilter] = useState<FilterType>('all');
 
   useEffect(() => {
     loadTasks();
@@ -30,11 +42,34 @@ const TaskListScreen: React.FC = () => {
   };
 
   const handleTaskClick = (task: Task) => {
-    // TODO: Открыть детали задачи
     console.log('Task clicked:', task);
   };
 
-  const getStats = (): TaskStats => {
+  const getFilteredTasks = (): Task[] => {
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+    switch (activeFilter) {
+      case 'today':
+        return tasks.filter(task => {
+          if (!task.dueDate) return false;
+          const dueDate = new Date(task.dueDate);
+          return dueDate.toDateString() === today.toDateString();
+        });
+      case 'overdue':
+        return tasks.filter(task => {
+          if (!task.dueDate) return false;
+          const dueDate = new Date(task.dueDate);
+          return dueDate < now && task.status !== 'completed';
+        });
+      default:
+        return tasks;
+    }
+  };
+
+  const filteredTasks = getFilteredTasks();
+
+  const getStatusCounts = () => {
     return {
       todo: tasks.filter(t => t.status === 'todo').length,
       inProgress: tasks.filter(t => t.status === 'in-progress').length,
@@ -42,114 +77,63 @@ const TaskListScreen: React.FC = () => {
     };
   };
 
-  const getFilteredTasks = (): Task[] => {
-    const now = new Date();
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-
-    switch (filter) {
-      case 'today':
-        return tasks.filter(t => {
-          if (!t.dueDate) return false;
-          const dueDate = new Date(t.dueDate);
-          return dueDate >= today && dueDate < new Date(today.getTime() + 86400000);
-        });
-      case 'expiring':
-        return tasks.filter(t => {
-          if (!t.dueDate || t.status === 'completed') return false;
-          const dueDate = new Date(t.dueDate);
-          return dueDate < new Date(now.getTime() + 7 * 86400000); // Next 7 days
-        }).sort((a, b) => new Date(a.dueDate!).getTime() - new Date(b.dueDate!).getTime());
-      default:
-        return tasks;
-    }
-  };
-
-  const stats = getStats();
-  const filteredTasks = getFilteredTasks();
+  const counts = getStatusCounts();
 
   return (
     <div className="task-list-screen">
       {/* Header */}
       <header className="screen-header">
-        <h1 className="greeting">Привет, {userName} 👋</h1>
-        <p className="subtitle">У вас {stats.todo} задач к выполнению</p>
+        <h1 className="screen-title">Виктор Иванов</h1>
+        <p className="screen-subtitle">Давайте сделаем этот день продуктивным</p>
       </header>
 
       {/* Stats Cards */}
-      <div className="stats-grid">
-        <div className="stat-card accent">
-          <div className="stat-icon">📋</div>
-          <div className="stat-content">
-            <h3 className="stat-value">{stats.todo}</h3>
-            <p className="stat-label">К выполнению</p>
-          </div>
+      <div className="stats-cards">
+        <div className="stat-card stat-card-primary">
+          <div className="stat-value">{counts.todo}</div>
+          <div className="stat-label">К выполнению</div>
         </div>
         <div className="stat-card">
-          <div className="stat-icon">⚡</div>
-          <div className="stat-content">
-            <h3 className="stat-value">{stats.inProgress}</h3>
-            <p className="stat-label">В работе</p>
-          </div>
+          <div className="stat-value">{counts.inProgress}</div>
+          <div className="stat-label">В работе</div>
         </div>
         <div className="stat-card">
-          <div className="stat-icon">✓</div>
-          <div className="stat-content">
-            <h3 className="stat-value">{stats.completed}</h3>
-            <p className="stat-label">Выполнено</p>
-          </div>
+          <div className="stat-value">{counts.completed}</div>
+          <div className="stat-label">Выполнено</div>
         </div>
       </div>
 
       {/* Filters */}
-      <div className="filters">
-        <Button
-          mode={filter === 'all' ? 'primary' : 'secondary'}
-          size="s"
-          className={`filter-chip ${filter === 'all' ? 'active' : ''}`}
-          onClick={() => setFilter('all')}
-        >
-          Все
-        </Button>
-        <Button
-          mode={filter === 'today' ? 'primary' : 'secondary'}
-          size="s"
-          className={`filter-chip ${filter === 'today' ? 'active' : ''}`}
-          onClick={() => setFilter('today')}
-        >
-          Сегодня
-        </Button>
-        <Button
-          mode={filter === 'expiring' ? 'primary' : 'secondary'}
-          size="s"
-          className={`filter-chip ${filter === 'expiring' ? 'active' : ''}`}
-          onClick={() => setFilter('expiring')}
-        >
-          Истекающие
-        </Button>
-      </div>
+      <Flex gap={8} className="filters">
+        {filters.map(filter => (
+          <Button
+            key={filter.id}
+            mode={activeFilter === filter.id ? 'primary' : 'secondary'}
+            onClick={() => setActiveFilter(filter.id)}
+          >
+            {filter.label}
+          </Button>
+        ))}
+      </Flex>
 
       {/* Task List */}
-      <div className="tasks-section">
-        <h2 className="section-title">Мои задачи</h2>
-
+      <div className="task-list">
         {filteredTasks.length === 0 ? (
           <div className="empty-state">
-            <div className="empty-icon">📝</div>
-            <h3>Нет задач</h3>
-            <p>Создайте новую задачу, нажав кнопку "+"</p>
+            <div className="empty-state-icon">📋</div>
+            <p className="empty-state-text">Задач не найдено</p>
+            <p className="empty-state-hint">Создайте новую задачу, нажав на кнопку +</p>
           </div>
         ) : (
-          <div className="task-list">
-            {filteredTasks.map(task => (
-              <TaskItem
-                key={task.id}
-                task={task}
-                onToggle={handleToggleTask}
-                onDelete={handleDeleteTask}
-                onClick={handleTaskClick}
-              />
-            ))}
-          </div>
+          filteredTasks.map(task => (
+            <TaskItem
+              key={task.id}
+              task={task}
+              onToggle={handleToggleTask}
+              onDelete={handleDeleteTask}
+              onClick={handleTaskClick}
+            />
+          ))
         )}
       </div>
     </div>
