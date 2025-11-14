@@ -1,0 +1,101 @@
+/* MaxUI Theme Overrides for Zenith */
+
+/* Override MaxUI CSS Variables */
+:root {
+  /* Переопределяем цвета MaxUI под Zenith палитру */
+  --max-ui-primary: var(--kinetic-violet);
+  --max-ui-secondary: var(--surface-gray);
+  --max-ui-background: var(--void-black);
+  --max-ui-surface: var(--surface-gray);
+  --max-ui-text-primary: var(--cloud-white);
+  --max-ui-text-secondary: var(--mist-gray);
+}
+
+/* Button overrides */
+[data-max-ui="Button"][data-mode="primary"] {
+  background: var(--kinetic-violet) !important;
+  color: var(--void-black) !important;
+  border: none !important;
+}
+
+[data-max-ui="Button"][data-mode="primary"]:hover:not(:disabled) {
+  background: #9484e3 !important;
+  box-shadow: 0 4px 16px rgba(126, 111, 213, 0.4) !important;
+}
+
+[data-max-ui="Button"][data-mode="secondary"] {
+  background: var(--surface-gray) !important;
+  color: var(--cloud-white) !important;
+  border: 1px solid transparent !important;
+}
+
+[data-max-ui="Button"][data-mode="secondary"]:hover:not(:disabled) {
+  background: rgba(126, 111, 213, 0.1) !important;
+  border-color: var(--kinetic-violet) !important;
+}
+
+/* Panel overrides */
+[data-max-ui="Panel"] {
+  background: var(--surface-gray) !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow: var(--shadow-card) !important;
+}
+
+/* Input overrides */
+[data-max-ui="Input"],
+[data-max-ui="Textarea"] {
+  background: var(--void-black) !important;
+  color: var(--cloud-white) !important;
+  border: 2px solid transparent !important;
+  border-radius: var(--radius-sm) !important;
+}
+
+[data-max-ui="Input"]:focus,
+[data-max-ui="Textarea"]:focus {
+  border-color: var(--kinetic-violet) !important;
+  box-shadow: 0 0 0 4px rgba(126, 111, 213, 0.1) !important;
+  outline: none !important;
+}
+
+[data-max-ui="Input"]::placeholder,
+[data-max-ui="Textarea"]::placeholder {
+  color: var(--mist-gray) !important;
+}
+
+/* IconButton overrides */
+[data-max-ui="IconButton"] {
+  border-radius: var(--radius-sm) !important;
+  transition: all 0.2s ease !important;
+}
+
+[data-max-ui="IconButton"]:hover:not(:disabled) {
+  background: rgba(126, 111, 213, 0.1) !important;
+}
+
+/* Switch overrides */
+[data-max-ui="Switch"] {
+  --switch-bg: var(--surface-gray);
+  --switch-bg-checked: var(--vibrant-green);
+}
+
+/* Typography overrides */
+[data-max-ui="Typography"] {
+  color: var(--cloud-white);
+  font-family: var(--font-family);
+}
+
+/* Ripple effect with Zenith colors */
+[data-max-ui="Ripple"] {
+  --ripple-color: rgba(126, 111, 213, 0.3);
+}
+
+/* Container overrides */
+[data-max-ui="Container"] {
+  background: var(--void-black);
+}
+
+/* Spinner with Zenith accent */
+[data-max-ui="Spinner"] {
+  --spinner-color: var(--kinetic-violet);
+}
+

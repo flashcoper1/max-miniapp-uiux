@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Task } from '../../../types';
+import { IconButton } from '@maxhub/max-ui';
 import './TaskItem.css';
 
 interface TaskItemProps {
@@ -50,8 +51,10 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onToggle, onDelete, onClick }
         )}
       </div>
 
-      <button
+      <IconButton
         className="task-delete"
+        mode="secondary"
+        size="s"
         onClick={(e) => {
           e.stopPropagation();
           onDelete(task.id);
@@ -60,7 +63,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onToggle, onDelete, onClick }
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <path d="M18 6L6 18M6 6l12 12" />
         </svg>
-      </button>
+      </IconButton>
     </div>
   );
 };

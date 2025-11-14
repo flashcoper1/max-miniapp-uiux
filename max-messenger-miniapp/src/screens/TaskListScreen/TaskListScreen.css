@@ -95,26 +95,26 @@
 }
 
 .filter-chip {
-  padding: var(--spacing-sm) var(--spacing-md);
-  border-radius: var(--radius-full);
-  background: var(--surface-gray);
-  color: var(--mist-gray);
-  font-size: 14px;
-  font-weight: 500;
   white-space: nowrap;
-  transition: all 0.2s ease;
-  border: 2px solid transparent;
+  border-radius: var(--radius-full) !important;
+  transition: all 0.2s ease !important;
 }
 
-.filter-chip:hover {
-  background: rgba(126, 111, 213, 0.1);
-  color: var(--cloud-white);
+.filter-chip[data-mode="secondary"] {
+  background: var(--surface-gray) !important;
+  color: var(--mist-gray) !important;
+  border: 2px solid transparent !important;
 }
 
-.filter-chip.active {
-  background: var(--kinetic-violet);
-  color: var(--void-black);
-  border-color: var(--kinetic-violet);
+.filter-chip[data-mode="secondary"]:hover {
+  background: rgba(126, 111, 213, 0.1) !important;
+  color: var(--cloud-white) !important;
+}
+
+.filter-chip.active[data-mode="primary"] {
+  background: var(--kinetic-violet) !important;
+  color: var(--void-black) !important;
+  border-color: var(--kinetic-violet) !important;
 }
 
 /* Tasks Section */

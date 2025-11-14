@@ -123,19 +123,14 @@
 /* Delete Button */
 .task-delete {
   flex-shrink: 0;
-  width: 32px;
-  height: 32px;
-  border-radius: var(--radius-sm);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--mist-gray);
-  transition: all 0.2s ease;
+  color: var(--mist-gray) !important;
+  transition: all 0.2s ease !important;
+  background: transparent !important;
 }
 
 .task-delete:hover {
-  background: rgba(255, 112, 67, 0.1);
-  color: var(--warning-orange);
+  background: rgba(255, 112, 67, 0.1) !important;
+  color: var(--warning-orange) !important;
 }
 
 .task-delete svg {

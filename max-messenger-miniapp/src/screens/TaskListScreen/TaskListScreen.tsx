@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import type { Task, TaskFilter, TaskStats } from '../../types';
 import { taskApi } from '../../api/taskApi';
+import { Button } from '@maxhub/max-ui';
 import TaskItem from '../../components/molecules/TaskItem';
 import './TaskListScreen.css';
 
@@ -101,24 +102,30 @@ const TaskListScreen: React.FC = () => {
 
       {/* Filters */}
       <div className="filters">
-        <button
+        <Button
+          mode={filter === 'all' ? 'primary' : 'secondary'}
+          size="s"
           className={`filter-chip ${filter === 'all' ? 'active' : ''}`}
           onClick={() => setFilter('all')}
         >
           Все
-        </button>
-        <button
+        </Button>
+        <Button
+          mode={filter === 'today' ? 'primary' : 'secondary'}
+          size="s"
           className={`filter-chip ${filter === 'today' ? 'active' : ''}`}
           onClick={() => setFilter('today')}
         >
           Сегодня
-        </button>
-        <button
+        </Button>
+        <Button
+          mode={filter === 'expiring' ? 'primary' : 'secondary'}
+          size="s"
           className={`filter-chip ${filter === 'expiring' ? 'active' : ''}`}
           onClick={() => setFilter('expiring')}
         >
           Истекающие
-        </button>
+        </Button>
       </div>
 
       {/* Task List */}

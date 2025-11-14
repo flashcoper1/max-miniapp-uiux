@@ -1,6 +1,193 @@
 .task-form-modal {
-  padding: var(--spacing-lg);
+  padding: var(--spacing-lg) !important;
   animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: var(--surface-gray) !important;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0 !important;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-lg);
+  position: relative;
+}
+
+.modal-handle {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 4px;
+  background: var(--mist-gray);
+  border-radius: var(--radius-full);
+}
+
+.modal-header h2 {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--cloud-white);
+  margin: 0;
+}
+
+.modal-close {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--mist-gray);
+  transition: all 0.2s ease;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.modal-close:hover {
+  background: rgba(138, 138, 142, 0.1);
+  color: var(--cloud-white);
+}
+
+.modal-close svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Form Styles */
+.task-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.form-group label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--mist-gray);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Override MaxUI Input styles */
+.form-group input,
+.form-group textarea {
+  background: var(--void-black) !important;
+  border: 2px solid transparent !important;
+  border-radius: var(--radius-sm) !important;
+  padding: var(--spacing-md) !important;
+  font-size: 16px !important;
+  color: var(--cloud-white) !important;
+  transition: all 0.2s ease !important;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: var(--kinetic-violet) !important;
+  box-shadow: 0 0 0 4px rgba(126, 111, 213, 0.1) !important;
+  outline: none !important;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: var(--mist-gray) !important;
+}
+
+/* Date input specific */
+.form-group input[type="date"] {
+  cursor: pointer;
+}
+
+.form-group input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.7);
+  cursor: pointer;
+}
+
+/* Priority Buttons */
+.priority-buttons {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.priority-btn {
+  flex: 1;
+  position: relative;
+  background: var(--void-black) !important;
+  border: 2px solid transparent !important;
+  transition: all 0.2s ease !important;
+}
+
+.priority-btn::before {
+  content: '';
+  position: absolute;
+  left: var(--spacing-sm);
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.priority-btn.priority-low::before {
+  background: var(--priority-low);
+}
+
+.priority-btn.priority-medium::before {
+  background: var(--priority-medium);
+}
+
+.priority-btn.priority-high::before {
+  background: var(--priority-high);
+}
+
+.priority-btn.active.priority-low {
+  border-color: var(--priority-low) !important;
+  background: rgba(66, 165, 245, 0.1) !important;
+}
+
+.priority-btn.active.priority-medium {
+  border-color: var(--priority-medium) !important;
+  background: rgba(255, 229, 82, 0.1) !important;
+}
+
+.priority-btn.active.priority-high {
+  border-color: var(--priority-high) !important;
+  background: rgba(255, 112, 67, 0.1) !important;
+}
+
+/* Submit Button */
+.submit-btn {
+  width: 100%;
+  padding: var(--spacing-md) var(--spacing-lg) !important;
+  background: var(--kinetic-violet) !important;
+  color: var(--void-black) !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  border-radius: var(--radius-md) !important;
+  margin-top: var(--spacing-md);
+  transition: all 0.2s ease !important;
+  border: none !important;
+}
+
+.submit-btn:hover:not(:disabled) {
+  background: #9484e3 !important;
+  box-shadow: 0 4px 16px rgba(126, 111, 213, 0.4) !important;
+}
+
+.submit-btn:disabled {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
 }
 
 .modal-header {

@@ -1,6 +1,8 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import '@maxhub/max-ui/dist/styles.css';
 import './index.css';
+import './maxui-overrides.css';
 import App from './App';
 
 createRoot(document.getElementById('root')!).render(
