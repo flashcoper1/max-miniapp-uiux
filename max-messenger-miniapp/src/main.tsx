@@ -1,20 +1,11 @@
-// src/main.tsx
-
-import React from 'react';
-import ReactDOM from 'react-dom/client';
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
 import './index.css';
+import App from './App';
 
-// БЫЛО:
-// import App from './App';
-
-// СТАЛО (правильно для именованного экспорта):
-import { App } from './App';
-
-const root = ReactDOM.createRoot(
-    document.getElementById('root') as HTMLElement
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <App />
+  </StrictMode>,
 );
-root.render(
-    <React.StrictMode>
-        <App />
-    </React.StrictMode>
-);
+

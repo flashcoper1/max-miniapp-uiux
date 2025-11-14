@@ -1,19 +1,18 @@
-
-export type TaskPriority = 'low' | 'medium' | 'high';
-
-export interface User {
-    id: string;
-    name: string;
-    avatarUrl?: string;
-}
-
 export interface Task {
-    id: string;
-    title: string;
-    description: string;
-    isCompleted: boolean;
-    dueDate?: Date;
-    priority: TaskPriority;
-    assignee?: User;
-    subtaskCount?: number;
+  id: string;
+  title: string;
+  description?: string;
+  dueDate?: string;
+  priority: 'low' | 'medium' | 'high';
+  status: 'todo' | 'in-progress' | 'completed';
+  createdAt: string;
 }
+
+export type TaskFilter = 'all' | 'today' | 'expiring';
+
+export interface TaskStats {
+  todo: number;
+  inProgress: number;
+  completed: number;
+}
+

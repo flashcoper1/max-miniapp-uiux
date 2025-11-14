@@ -1,2 +1,2 @@
-// src/components/molecules/TaskItem/index.ts
-export * from './TaskItem';
+export { default } from './TaskItem';
+
