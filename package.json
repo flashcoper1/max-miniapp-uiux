@@ -1,7 +1,9 @@
 {
   "dependencies": {
     "@maxhub/max-ui": "^0.1.12",
-    "clsx": "^2.1.1"
+    "clsx": "^2.1.1",
+    "react": "^19.2.0",
+    "vite": "^7.2.2"
   },
   "devDependencies": {
     "@types/react": "^19.2.2",

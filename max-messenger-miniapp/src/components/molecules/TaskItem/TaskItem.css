@@ -11,8 +11,7 @@
   position: relative;
   overflow: hidden;
 }
-
-.task-item::before {
+.task-item::after {
   content: '';
   position: absolute;
   left: 0;
@@ -29,7 +28,7 @@
   box-shadow: 0 8px 24px rgba(126, 111, 213, 0.15);
 }
 
-.task-item:hover::before {
+.task-item:hover::after {
   opacity: 1;
 }
 
@@ -48,20 +47,20 @@
   opacity: 1;
 }
 
-.task-item[data-priority="low"]::before {
-  background: #4ECDC4;
+.task-item[data-priority="high"]::after {
+  background: #FF6B6B;
   opacity: 1;
 }
 
-/* Checkbox */
-.task-checkbox {
-  flex-shrink: 0;
-  width: 24px;
-  height: 24px;
-  border: 2px solid var(--mist-gray);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
+.task-item[data-priority="medium"]::after {
+  background: var(--focus-yellow);
+  opacity: 1;
+}
+
+.task-item[data-priority="low"]::after {
+  background: #4ECDC4;
+  opacity: 1;
+}
   justify-content: center;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -135,6 +134,16 @@
   gap: 4px;
 }
 
+/* Generic task-date used by calendar timeline (overridden by calendar layout) */
+.task-date {
+  font-size: 12px;
+  color: var(--mist-gray);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: right;
+}
+
 .task-due-date svg {
   width: 14px;
   height: 14px;
@@ -169,14 +178,40 @@
 }
 
 /* Delete Button */
-.task-delete {
+.task-actions {
+  position: relative;
   flex-shrink: 0;
-  opacity: 0;
-  transition: opacity 0.2s ease;
 }
 
-.task-item:hover .task-delete {
-  opacity: 1;
+.task-menu-btn {
+  color: var(--mist-gray) !important;
+}
+
+.task-menu {
+  position: absolute;
+  right: 0;
+  top: -8px;
+  background: var(--surface-gray);
+  border-radius: 8px;
+  padding: 6px 0;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  min-width: 120px;
+  z-index: 50;
+}
+
+.task-menu-item {
+  display: block;
+  width: 100%;
+  padding: 8px 12px;
+  color: var(--cloud-white);
+  background: transparent;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.task-menu-item:hover {
+  background: rgba(126,111,213,0.08);
 }
 
 /* Animation */

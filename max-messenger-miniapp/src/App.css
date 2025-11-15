@@ -14,28 +14,46 @@
 
 /* Floating Action Button */
 .fab {
-  position: fixed;
-  bottom: 90px;
-  right: 24px;
-  width: 56px;
-  height: 56px;
+  position: absolute;
+  left: 50%;
+  top: 50%; /* center vertically inside bottom-nav */
+  transform: translate(-50%, -50%);
+  width: 64px;
+  height: 64px;
   border-radius: 50% !important;
   background: var(--focus-yellow) !important;
-  color: var(--void-black) !important;
-  font-size: 28px;
-  font-weight: 300;
+  color: var(--cloud-white) !important;
+  font-size: 0; /* use SVG for icon size */
+  font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 8px 24px rgba(255, 229, 82, 0.3),
-              0 4px 12px rgba(0, 0, 0, 0.4) !important;
-  z-index: 100;
+  box-shadow: 0 12px 36px rgba(255, 229, 82, 0.35),
+              0 6px 18px rgba(0, 0, 0, 0.45) !important;
+  z-index: 200;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
   border: none !important;
 }
 
+.fab .fab-icon {
+  width: 36px;
+  height: 36px;
+  display: block;
+}
+
+@media (max-width: 480px) {
+  .fab .fab-icon {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+.fab:hover .fab-icon {
+  transform: scale(1.03);
+}
+
 .fab:hover {
-  transform: scale(1.1);
+  transform: scale(1.03);
   box-shadow: 0 12px 32px rgba(255, 229, 82, 0.4),
               0 6px 16px rgba(0, 0, 0, 0.5) !important;
 }
@@ -50,17 +68,16 @@
   bottom: 0;
   left: 0;
   right: 0;
-  height: 72px;
-  background: var(--surface-gray);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-top: 1px solid rgba(138, 138, 142, 0.1);
+  height: 88px;
+  background: linear-gradient(90deg, rgba(126,111,213,0.95) 0%, rgba(143,129,234,0.9) 100%);
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
-  padding: 0 16px;
-  z-index: 99;
-  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.2);
+  padding: 0 28px;
+  z-index: 90;
+  border-top-left-radius: 18px;
+  border-top-right-radius: 18px;
+  box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.4);
 }
 
 .nav-item {
@@ -73,7 +90,7 @@
   background: transparent;
   border: none;
   cursor: pointer;
-  color: var(--mist-gray);
+  color: rgba(255,255,255,0.9);
   transition: all 0.2s ease;
   border-radius: 12px;
   position: relative;
@@ -93,29 +110,19 @@
 }
 
 .nav-item:hover {
-  background: rgba(126, 111, 213, 0.1);
+  background: rgba(255,255,255,0.06);
   color: var(--cloud-white);
 }
 
 .nav-item.active {
-  color: var(--kinetic-violet);
+  color: var(--void-black);
 }
 
 .nav-item.active svg {
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 
-.nav-item.active::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 32px;
-  height: 3px;
-  background: var(--kinetic-violet);
-  border-radius: 0 0 4px 4px;
-}
+/* keep simple active indicator removed for gradient nav */
 
 /* Animations */
 @keyframes fadeIn {
@@ -136,15 +143,19 @@
 /* Responsive */
 @media (max-width: 480px) {
   .fab {
-    bottom: 80px;
-    right: 16px;
-    width: 48px;
-    height: 48px;
-    font-size: 24px;
+    /* keep centered on mobile while slightly smaller */
+    /* center inside bottom-nav on mobile as well */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 56px;
+    height: 56px;
+    font-size: 30px;
+    font-weight: 700;
   }
 
   .bottom-nav {
-    height: 64px;
+    height: 72px;
   }
 }
 

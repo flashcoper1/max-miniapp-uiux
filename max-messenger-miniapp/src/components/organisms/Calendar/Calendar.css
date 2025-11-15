@@ -4,6 +4,10 @@
   box-shadow: 0 8px 32px rgba(126, 111, 213, 0.1) !important;
   padding: var(--spacing-lg) !important;
 }
+/* ensure overlays sit correctly inside the panel */
+.calendar-panel {
+  position: relative;
+}
 
 /* Header Navigation */
 .calendar-header {
@@ -45,22 +49,125 @@
   letter-spacing: 0.3px;
 }
 
-/* Weekday Headers */
-.calendar-weekdays {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: var(--spacing-xs);
-  margin-bottom: var(--spacing-md);
+.calendar-title-btn {
+  background: transparent;
+  border: none;
+  color: var(--cloud-white);
+  font-size: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 8px;
 }
 
-.calendar-weekday {
-  text-align: center;
-  font-size: 12px;
-  font-weight: 500;
+.calendar-title-btn:hover {
+  background: rgba(255,255,255,0.02);
+}
+
+/* Weekday Headers */
+
+/* Week strip (Mon - Sun) */
+.calendar-weekstrip {
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-md);
+  padding: 6px 4px;
+}
+
+/* ensure weekstrip is beneath month overlay */
+.calendar-weekstrip {
+  position: relative;
+  z-index: 1;
+}
+
+/* Month stack container for vertical scrolling */
+.calendar-months {
+  /* render the month stack inside the panel flow under the header/title */
+  position: static;
+  margin: 8px 0 0 0;
+  z-index: 2;
+  max-height: 48vh;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  transition: opacity 260ms ease, transform 320ms cubic-bezier(0.4,0,0.2,1);
+  will-change: opacity, transform;
+  pointer-events: auto;
+}
+
+/* hide native scrollbars for the month stack (WebKit, Firefox, IE/Edge) */
+.calendar-months {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.calendar-months::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.calendar-months.open {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.calendar-months.closing {
+  opacity: 0;
+  transform: translateY(-8px);
+  pointer-events: none;
+}
+
+.calendar-month {
+  scroll-snap-align: start;
+  padding: 12px 0 18px;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  margin-bottom: 12px;
+  /* removed rounded dark container and side gutters per request */
+  background: transparent;
+  border-radius: 0;
+  overflow: visible;
+}
+
+/* Style the month grid as a floating rounded card so it doesn't obscure header text */
+.calendar-month .calendar-grid {
+  width: 100%;
+  max-width: 520px;
+  /* keep month days on a dark surface */
+  background: var(--surface-gray);
+  border-radius: 0;
+  padding: 12px;
+  box-shadow: none;
+}
+
+.calendar-weekday-item {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 6px;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
   color: var(--mist-gray);
+  cursor: pointer;
+}
+
+.calendar-weekday-item.selected {
+  background: rgba(126,111,213,0.06);
+  color: var(--cloud-white);
+}
+
+.weekday-abbrev {
+  font-size: 12px;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  padding: var(--spacing-sm);
+  letter-spacing: 0.6px;
+}
+
+.weekday-number {
+  font-size: 16px;
+  font-weight: 600;
 }
 
 /* Days Grid with Animation */
@@ -98,7 +205,8 @@
   gap: 2px;
   position: relative;
   background: transparent !important;
-  border: 2px solid transparent !important;
+  border: 1px solid rgba(126,111,213,0.18) !important; /* light purple outline */
+  box-shadow: 0 0 0 4px rgba(126,111,213,0.02) inset;
   transition: all 0.2s ease !important;
   cursor: pointer;
 }
