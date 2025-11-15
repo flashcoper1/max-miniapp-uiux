@@ -50,7 +50,7 @@
 /* Timeline styling for tasks */
 .tasks-for-date {
   position: relative;
-  padding-left: 48px;
+  padding-left: 0;
   gap: var(--spacing-sm);
 }
 
@@ -266,6 +266,191 @@
 .btn.primary { background: var(--kinetic-violet); color: white; border: none; box-shadow: 0 10px 30px rgba(126,111,213,0.18); }
 .btn.ghost { background: transparent; border: 1px solid rgba(255,255,255,0.04); color: var(--cloud-white); }
 
+.time-input {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  color: var(--cloud-white);
+  padding: 10px 6px;
+  text-align: left;
+  width: 100%;
+}
+.time-input:focus { outline: none; border-bottom-color: rgba(126,111,213,0.7); }
+
+.date-input {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  color: var(--cloud-white);
+  padding: 10px 6px;
+  text-align: left;
+  width: 100%;
+}
+.date-input:focus { outline: none; border-bottom-color: rgba(126,111,213,0.7); }
+
+/* Time picker popup */
+.time-picker-overlay {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999 !important;
+  background: rgba(0,0,0,0.85) !important;
+  /* DEBUG: visible outline to ensure overlay is on top */
+  outline: 3px solid rgba(255,0,0,0.18);
+}
+.time-picker {
+  width: min(520px, 96vw);
+  max-width: calc(100% - 40px);
+  background: var(--surface-gray);
+  border-radius: 14px;
+  padding: 12px 10px 18px 10px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  color: var(--cloud-white);
+  max-height: 60vh;
+  overflow: hidden;
+  position: relative;
+}
+.time-columns {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: stretch;
+  padding: 8px 4px;
+}
+.time-column {
+  flex: 0 0 140px;
+  width: 140px;
+  height: min(260px, 48vh);
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  touch-action: pan-y;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  padding: 6px 2px;
+  scroll-snap-type: y mandatory;
+  background: rgba(255,255,255,0.02);
+  border-radius: 8px;
+}
+.time-column { scroll-snap-type: y mandatory; }
+.time-item {
+  width: 72px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: rgba(255,255,255,0.95);
+  border-radius: 8px;
+  cursor: pointer;
+  user-select: none;
+  font-size: 20px;
+  scroll-snap-align: center;
+}
+
+/* Temporary debug: make the picker container visible on mobile for troubleshooting */
+.time-picker.debug {
+  border: 2px dashed rgba(255,255,0,0.2);
+}
+
+.time-picker-debug-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 100001;
+  background: rgba(255,255,0,0.06);
+  color: #fff;
+  padding: 6px 8px;
+  font-size: 12px;
+  border-radius: 6px;
+  backdrop-filter: blur(2px);
+  max-width: 220px;
+  line-height: 1.1;
+  text-shadow: 0 1px 0 rgba(0,0,0,0.6);
+}
+
+/* Fixed debug box rendered in document.body via portal */
+.time-picker-fixed-debug {
+  position: fixed;
+  right: 12px;
+  bottom: 12px;
+  z-index: 1000005 !important;
+  background: rgba(255, 224, 102, 0.98);
+  color: #111;
+  padding: 10px 14px;
+  border-radius: 10px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.45);
+  font-weight: 700;
+  font-size: 13px;
+  pointer-events: none;
+}
+.time-item.selected {
+  background: rgba(126,111,213,0.32);
+  color: var(--cloud-white);
+  box-shadow: 0 12px 36px rgba(126,111,213,0.22);
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.time-picker { position: relative; }
+.time-picker::before {
+  content: '';
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  height: 48px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+  pointer-events: none;
+  border-radius: 8px;
+}
+
+/* Create top/bottom spacers inside each column so first/last items can center */
+.time-column::before,
+.time-column::after {
+  content: '';
+  display: block;
+  flex: 0 0 auto;
+  height: calc((100% - 56px) / 2);
+}
+
+/* ensure the picker is centered in small viewports */
+.time-picker { display:flex; flex-direction:column; align-items:center; justify-content:center; }
+.time-columns { width:100%; max-width:480px; }
+
+/* Fade overlays to make wheel more readable */
+.time-picker .fade-top,
+.time-picker .fade-bottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 40px;
+  pointer-events: none;
+  z-index: 2;
+}
+.time-picker .fade-top { top: 0; background: linear-gradient(180deg, rgba(3,3,6,0.85), rgba(3,3,6,0)); }
+.time-picker .fade-bottom { bottom: 0; background: linear-gradient(0deg, rgba(3,3,6,0.85), rgba(3,3,6,0)); }
+
+/* hide native scrollbar */
+.time-column::-webkit-scrollbar { width: 0; height: 0; }
+.time-column { -ms-overflow-style: none; scrollbar-width: none; }
+.time-item.selected {
+  background: rgba(126,111,213,0.18);
+  color: var(--cloud-white);
+  box-shadow: 0 8px 24px rgba(126,111,213,0.12);
+}
+.time-picker-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 12px; }
+
 /* Floating save appearance */
 .task-modal { position: relative; }
 .task-modal .save-fab { position: absolute; right: 20px; bottom: -20px; }
@@ -273,7 +458,7 @@
 .tasks-for-date::before {
   content: '';
   position: absolute;
-  left: 24px;
+  left: 8px;
   top: 12px;
   bottom: 12px;
   width: 3px;
@@ -293,7 +478,7 @@
 .tasks-for-date .task-item::before {
   content: '';
   position: absolute;
-  left: -40px;
+  left: 8px;
   top: 18px;
   width: 12px;
   height: 12px;
@@ -346,11 +531,11 @@
 
 @media (max-width: 480px) {
   .tasks-for-date {
-    padding-left: 36px;
+    padding-left: 0;
   }
 
   .tasks-for-date .task-item::before {
-    left: -32px;
+    left: 8px;
     top: 16px;
     width: 10px;
     height: 10px;

@@ -77,6 +77,29 @@ function App() {
           onSubmit={handleCreateTask}
           onClose={() => setIsFormOpen(false)}
         />
+        {/* Global debug box appended to document.body to verify stacking (DEV only) */}
+        {typeof document !== 'undefined' && (
+          (() => {
+            const el = document.getElementById('global-debug-box');
+            if (!el) {
+              const d = document.createElement('div');
+              d.id = 'global-debug-box';
+              d.textContent = 'GLOBAL DEBUG BOX';
+              d.style.position = 'fixed';
+              d.style.left = '12px';
+              d.style.bottom = '12px';
+              d.style.zIndex = '2147483646';
+              d.style.background = 'rgba(255,0,0,0.95)';
+              d.style.color = '#fff';
+              d.style.padding = '8px 12px';
+              d.style.borderRadius = '8px';
+              d.style.fontWeight = '700';
+              d.style.pointerEvents = 'none';
+              document.body.appendChild(d);
+            }
+            return null;
+          })()
+        )}
       </div>
     </MaxUI>
   );
